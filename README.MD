@@ -1,5 +1,5 @@
 # Simple producer and consumer for Kafka based on rdkafka
-Produser:  
+Producer:  
 ```rust
 use kafka::{Serialize, Deserialize, consumer::{CustomConsumer, CustomConsumerTrait}, producer::Producer, Headers};
 #[derive(Debug, Serialize, Deserialize)]
