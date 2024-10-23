@@ -76,3 +76,15 @@ docker run -d \
     -v /vol1/kafka-data:/var/lib/kafka/data \
     confluentinc/cp-kafka:7.7.1
 ```  
+#### Example for find dirs for share
+```bash
+docker inspect kafka|jq '.[].Mounts[] | .Type ,.Destination'
+"volume"
+"/etc/zookeeper/secrets"
+"bind"
+"/var/lib/zookeeper"
+"volume"
+"/var/lib/zookeeper/log"
+"volume"
+"/var/lib/zookeeper/data"
+```
