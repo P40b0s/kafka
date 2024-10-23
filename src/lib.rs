@@ -18,7 +18,6 @@ mod tests
     use super::Headers;
     use serde::Serialize;
     use serde::Deserialize;
-    use crate::{Serialize, Deserialize, consumer::{CustomConsumer, CustomConsumerTrait}, producer::Producer, Headers};
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct User

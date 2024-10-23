@@ -43,3 +43,36 @@ p2.consume(|p: Option<User>, h|
     true
 }).await;
 ```  
+
+# Share volumes
+
+### Create directory for Kafka data  
+``` bash
+mkdir -p /vol1/kafka-data
+```
+
+### Make sure the user has read and write permissions.  
+```bash
+chown -R 1000:1000 /vol1/kafka-data
+```
+
+### Start the containers:  
+``` bash
+docker run -d \
+    --name=kafka-vols \
+    --net=host \
+    --user=1000 \
+    -e KAFKA_NODE_ID=1 \
+    -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP='CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT' \
+    -e KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://kafka-vols:29092,PLAINTEXT_HOST://localhost:9092' \
+    -e KAFKA_PROCESS_ROLES='broker,controller' \
+    -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
+    -e KAFKA_CONTROLLER_QUORUM_VOTERS='1@kafka-vols:29093' \
+    -e KAFKA_LISTENERS='PLAINTEXT://kafka-vols:29092,CONTROLLER://kafka-vols:29093,PLAINTEXT_HOST://0.0.0.0:9092' \
+    -e KAFKA_INTER_BROKER_LISTENER_NAME='PLAINTEXT' \
+    -e KAFKA_CONTROLLER_LISTENER_NAMES='CONTROLLER' \
+    -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
+    -e CLUSTER_ID='MkU3OEVBNTcwNTJENDM2Qk' \
+    -v /vol1/kafka-data:/var/lib/kafka/data \
+    confluentinc/cp-kafka:7.7.1
+```  

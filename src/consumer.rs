@@ -37,6 +37,7 @@ pub struct CustomConsumer<C: ConsumerContext>
 
 impl<C: ConsumerContext> CustomConsumer<C> where StreamConsumer<C>: FromClientConfigAndContext<CustomContext>
 {
+    /// offset - auto.offset.reset setting
     pub fn new(client_id: &str, group_id: &str, topics: &[&str], brokers: &[&str]) -> Self
     {
         let context = CustomContext;
@@ -46,9 +47,9 @@ impl<C: ConsumerContext> CustomConsumer<C> where StreamConsumer<C>: FromClientCo
             .set("bootstrap.servers", brokers.join(","))
             .set("enable.partition.eof", "false")
             .set("session.timeout.ms", "6000")
-            .set("enable.auto.commit", "true")
+            .set("enable.auto.commit", "false")
             //.set("statistics.interval.ms", "30000")
-            //.set("auto.offset.reset", "smallest")
+            //.set("auto.offset.reset", "beginning")
             .set_log_level(RDKafkaLogLevel::Debug)
             .create_with_context(context)
             .expect("Consumer creation failed");
@@ -112,7 +113,6 @@ impl<C: ConsumerContext + 'static> CustomConsumerTrait for CustomConsumer<C>
                     }
                     f(payload, m.headers());
                     self.consumer.commit_message(&m, CommitMode::Async).unwrap();
-                    
                 }
             };
         }
