@@ -12,12 +12,13 @@ pub use serde::{Serialize, Deserialize};
 #[cfg(test)]
 mod tests 
 {
-    use consumer::{CustomConsumer, CustomConsumerTrait};
+    use super::consumer::{CustomConsumer, CustomConsumerTrait};
     use logger::debug;
-    use producer::Producer;
-    use super::*;
+    use super::producer::Producer;
+    use super::Headers;
     use serde::Serialize;
     use serde::Deserialize;
+    use crate::{Serialize, Deserialize, consumer::{CustomConsumer, CustomConsumerTrait}, producer::Producer, Headers};
 
     #[derive(Debug, Serialize, Deserialize)]
     pub struct User
